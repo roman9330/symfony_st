@@ -4,7 +4,7 @@
 export $(grep -v '^#' /srv/src/app/.env.install | xargs)
 
 install_path=/srv/src/symfony_install
-target_path=${WORKDIR}
+target_path=/srv/src/app
 
 On_Green='\033[42m'
 NC='\033[0m' # No Color
@@ -17,7 +17,7 @@ if test -f "${target_path}/symfony.lock"; then
     curl -sS https://get.symfony.com/cli/installer | bash
     mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
-    symfony new $install_path --version="${SYMFONY_VERSION_INSTALL}" --webapp >/dev/null
+    symfony new $install_path --version="6.3.*@dev" --webapp >/dev/null
 
     rm -rf $install_path/.git
     rm -rf $install_path/docker*
@@ -25,7 +25,7 @@ if test -f "${target_path}/symfony.lock"; then
     echo -e "${On_Green}   Generate .env.local file   ${NC}"
 
     echo -e "# Copy from project env file" >> $install_path/.env.local
-    cat ${WORKDIR}/.env.install >> $install_path/.env.local
+    cat ${target_path}/.env.install >> $install_path/.env.local
     echo -e " " >> $install_path/.env.local
     echo -e " " >> $install_path/.env.local
 
@@ -48,7 +48,7 @@ if test -f "${target_path}/symfony.lock"; then
 
     echo -e "${On_Green}   Generate .gitignore file   ${NC}"
 
-    cat ${WORKDIR}/.gitignore >> $install_path/.gitignore
+    cat ${target_path}/.gitignore >> $install_path/.gitignore
 
 
     echo -e "${On_Green}   Copy files to project folder   ${NC}"
