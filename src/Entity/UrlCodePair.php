@@ -24,6 +24,12 @@ class UrlCodePair
     #[ORM\Column(type: Types::INTEGER)]
     private int $counter = 0;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private \DateTime $date_create;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, updatable: true)]
+    private \DateTime $date_update;
+
     /**
      * @param string $url
      * @param string $code
@@ -32,6 +38,8 @@ class UrlCodePair
     {
         $this->url = $url;
         $this->code = $code;
+        $this->setDateCreate();
+        $this->setDateUpdate();
     }
 
     /**
@@ -85,7 +93,36 @@ class UrlCodePair
     public function incrementCounter(): void
     {
         $this->counter++;
+        $this->setDateUpdate();
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateCreate(): \DateTime
+    {
+        return $this->date_create;
+    }
+
+    public function setDateCreate(): void
+    {
+        $this->date_create = new \DateTime();
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateUpdate(): \DateTime
+    {
+        return $this->date_update;
+    }
+
+
+    public function setDateUpdate(): void
+    {
+        $this->date_update = new \DateTime();
+    }
+
 
 
 

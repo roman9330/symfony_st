@@ -1,0 +1,25 @@
+{%  extends 'base.html.twig' %}
+
+{% block title %} Статистика переходів по коду {{ code }} {% endblock %}
+
+{% block body %}
+    <section>
+        <a href="{{ links.new_url }}">Додати нове скорочення</a>
+    </section>
+    <section>
+        <ul>
+            <li>Id: {{ url_info.id }}</li>
+            <li>Code: {{ url_info.code }}</li>
+            <li>Url: {{ url_info.url }}</li>
+            <li>Stat: {{ url_info.counter }}</li>
+            <li>Create at: {{ url_info.getDateCreate|date('d-m-Y H:i:s') }}</li>
+            {% if url_info.getDateUpdate != url_info.getDateCreate %}
+                <li>Last use at: {{ url_info.getDateUpdate|date('d-m-Y H:i:s') }}</li>
+            {% endif %}
+        </ul>
+    </section>
+
+    <iframe src="{{ url_info.url }}" frameborder="0"></iframe>
+
+
+{% endblock %}

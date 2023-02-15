@@ -23,6 +23,7 @@ class UrlService extends AbstractEntityService
     public function incrementUrlCounter(UrlCodePair $url)
     {
         $url->incrementCounter();
+//        $url->setDateUpdate();
         $this->save($url);
 
     }
@@ -35,6 +36,7 @@ class UrlService extends AbstractEntityService
              */
             $url = $this->getUrlByCode($code);
             $url->incrementCounter();
+//            $url->setDateUpdate();
             $this->save();
             return $url;
         } catch (\Throwable) {

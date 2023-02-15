@@ -31,11 +31,13 @@ class UrlController extends AbstractController
     {
     }
 
-    #[Route('/encode', methods: ['POST'])]
+    #[Route('/encode', name: 'encode_url', methods: ['POST'])]
     public function encodeActon(Request $request): Response
     {
         $code = $this->encoder->encode($request->request->get('url'));
-        return new Response($code);
+        return $this->redirectToRoute('url_stats', ['code'=>$code]);
+//        $url = $this->generateUrl('url_stats', ['code'=>$code]);
+//        return new RedirectResponse($url);
     }
 
     #[Route('/decode', methods: ['POST'])]
@@ -63,19 +65,45 @@ class UrlController extends AbstractController
     }
 
     #[Route('/{code}/stat',
+        name: 'url_stats',
         requirements: ['code' => '\w{6}'],
         methods: ['GET'])]
     public function redirectStatisticAction(string $code): Response
     {
+        $vars = [
+            'code'=>$code,
+            'links'=>[
+                'new_url'=>$this->container->get('router')->getRouteCollection()->get('create_new_code')->getPath()
+            ]
+        ];
         try{
             /**
              * @var UrlCodePair $url
              */
             $url = $this->urlService->getUrlByCode($code);
-            $response = new Response($url->getUrl() . ' -- ' . $url->getCounter());
+            $vars = $vars + [
+                'url_info'=>$url,
+                'favicon'=>parse_url($url->getUrl())['host'] . '/favicon.ico'
+            ];
+            $template = 'url_statistic.html.twig';
         }catch (\Throwable $e){
             $response = new Response($e->getMessage(), 400);
+            $vars = $vars + [
+                'error'=> $e
+            ];
+            $template = 'error.html.twig';
         }
-        return $response;
+        return $this->render($template, $vars);
+    }
+
+    #[Route('/new',
+        name: 'create_new_code',
+        methods: ['GET'])]
+    public function addCodePageAction(): Response
+    {
+        return $this->render('url_create.html.twig',[
+            'form_action'=> $this->generateUrl('encode_url')
+//            'form_action'=>$this->container->get('router')->getRouteCollection()->get('encode_url')->getPath()
+        ]);
     }
 }

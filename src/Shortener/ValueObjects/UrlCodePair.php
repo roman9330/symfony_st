@@ -6,6 +6,7 @@ class UrlCodePair
 {
     protected string $code;
     protected string $url;
+    protected string $date_create;
 
     /**
      * @param string $code
