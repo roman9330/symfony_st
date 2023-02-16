@@ -28,7 +28,7 @@ class UrlCodePair
     private \DateTime $date_create;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, updatable: true)]
-    private \DateTime $date_update;
+    private ?\DateTime $date_update = null;
 
     /**
      * @param string $url
@@ -39,7 +39,6 @@ class UrlCodePair
         $this->url = $url;
         $this->code = $code;
         $this->setDateCreate();
-        $this->setDateUpdate();
     }
 
     /**
@@ -112,7 +111,7 @@ class UrlCodePair
     /**
      * @return \DateTime
      */
-    public function getDateUpdate(): \DateTime
+    public function getDateUpdate(): \DateTime|null
     {
         return $this->date_update;
     }

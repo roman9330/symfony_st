@@ -13,7 +13,7 @@
             <li>Url: {{ url_info.url }}</li>
             <li>Stat: {{ url_info.counter }}</li>
             <li>Create at: {{ url_info.getDateCreate|date('d-m-Y H:i:s') }}</li>
-            {% if url_info.getDateUpdate != url_info.getDateCreate %}
+            {% if url_info.getDateUpdate != null %}
                 <li>Last use at: {{ url_info.getDateUpdate|date('d-m-Y H:i:s') }}</li>
             {% endif %}
         </ul>
